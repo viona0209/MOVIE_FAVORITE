@@ -1,5 +1,6 @@
+import 'package:daftar_film_favorite/detail_page.dart';
 import 'package:flutter/material.dart';
-import 'movie.dart';
+import 'package:daftar_film_favorite/models/movie.dart';
 import 'movie_data.dart';
 
 class HomePage extends StatefulWidget {
@@ -101,8 +102,11 @@ class _HomePageState extends State<HomePage> {
                     subtitle: Text('Tahun: ${movie.year}'),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Kamu memilih ${movie.title}')),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => DetailPage(movie: movie),
+                        ),
                       );
                     },
                   ),
