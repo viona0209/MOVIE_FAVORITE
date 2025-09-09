@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'models/movie.dart';
+import 'models/favorite_manager.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
   final Movie movie;
 
   const DetailPage({super.key, required this.movie});
 
   @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  @override
   Widget build(BuildContext context) {
+    final isFav = FavoriteManager.isFavorite(widget.movie);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -15,7 +23,10 @@ class DetailPage extends StatelessWidget {
           SizedBox(
             height: 300,
             width: double.infinity,
-            child: Image.asset(movie.posterAsset, fit: BoxFit.cover),
+            child: Image.asset(
+              widget.movie.posterAsset,
+              fit: BoxFit.cover,
+            ),
           ),
           DraggableScrollableSheet(
             initialChildSize: 0.65,
@@ -39,15 +50,14 @@ class DetailPage extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              movie.title,
+                              widget.movie.title,
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
                               ),
                               maxLines: 2,
-                              overflow: TextOverflow
-                                  .ellipsis,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Row(
@@ -65,27 +75,23 @@ class DetailPage extends StatelessWidget {
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 12),
                       Wrap(
                         spacing: 8,
-                        children: movie.genre
+                        children: widget.movie.genre
                             .split(',')
                             .map(
                               (g) => Chip(
                                 label: Text(
                                   g.trim(),
-                                  style: const TextStyle(color: Colors.black87),
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                                 backgroundColor: Colors.brown,
                               ),
                             )
                             .toList(),
                       ),
-
                       const SizedBox(height: 16),
-
-                      // DESKRIPSI
                       const Text(
                         "Description",
                         style: TextStyle(
@@ -96,7 +102,7 @@ class DetailPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        movie.synopsis,
+                        widget.movie.synopsis,
                         style: const TextStyle(
                           fontSize: 15,
                           height: 1.4,
@@ -110,7 +116,7 @@ class DetailPage extends StatelessWidget {
             },
           ),
 
-          // BACK DAN FAVORITE
+          // Tombol back dan favorite
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -121,7 +127,14 @@ class DetailPage extends StatelessWidget {
                     icon: Icons.arrow_back,
                     onTap: () => Navigator.pop(context),
                   ),
-                  _circleButton(icon: Icons.favorite_border, onTap: () {}),
+                  _circleButton(
+                    icon: isFav ? Icons.favorite : Icons.favorite_border,
+                    onTap: () {
+                      setState(() {
+                        FavoriteManager.toggleFavorite(widget.movie);
+                      });
+                    },
+                  ),
                 ],
               ),
             ),
@@ -142,16 +155,6 @@ class DetailPage extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: Icon(icon, color: Colors.white),
       ),
-    );
-  }
-
-  Widget _infoItem(IconData icon, String text) {
-    return Row(
-      children: [
-        Icon(icon, color: Colors.white70, size: 18),
-        const SizedBox(width: 6),
-        Text(text, style: const TextStyle(color: Colors.white70)),
-      ],
     );
   }
 }
