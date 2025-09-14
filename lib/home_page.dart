@@ -2,7 +2,7 @@ import 'package:daftar_film_favorite/detail_page.dart';
 import 'package:daftar_film_favorite/favorite_page.dart';
 import 'package:flutter/material.dart';
 import 'package:daftar_film_favorite/models/movie.dart';
-import 'movie_data.dart';
+import 'models/movie_data.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

@@ -1,4 +1,4 @@
-import 'models/movie.dart';
+import 'movie.dart';
 
 const movies = <Movie>[
   Movie(

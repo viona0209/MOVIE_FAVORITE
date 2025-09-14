@@ -23,10 +23,7 @@ class _DetailPageState extends State<DetailPage> {
           SizedBox(
             height: 300,
             width: double.infinity,
-            child: Image.asset(
-              widget.movie.posterAsset,
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset(widget.movie.posterAsset, fit: BoxFit.cover),
           ),
           DraggableScrollableSheet(
             initialChildSize: 0.65,
@@ -131,7 +128,20 @@ class _DetailPageState extends State<DetailPage> {
                     icon: isFav ? Icons.favorite : Icons.favorite_border,
                     onTap: () {
                       setState(() {
+                        final wasFav = FavoriteManager.isFavorite(widget.movie);
                         FavoriteManager.toggleFavorite(widget.movie);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              wasFav
+                                  ? "Film berhasil dihapus dari favorite"
+                                  : "Film berhasil ditambahkan ke favorite",
+                            ),
+                            duration: const Duration(seconds: 2),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
                       });
                     },
                   ),
